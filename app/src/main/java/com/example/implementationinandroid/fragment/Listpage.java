@@ -1,10 +1,8 @@
 package com.example.implementationinandroid.fragment;
 
-import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +16,8 @@ public class Listpage extends BaseFragment {
     int count = 0;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         Bundle bundle = getArguments();
         count = bundle.getInt("page");
     }
@@ -27,11 +25,8 @@ public class Listpage extends BaseFragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        if (container == null) {
-            return null;
-        }
-        View view = inflater.inflate(R.layout.fragment_listpage, container, false);
-        return view;
+
+        return inflater.inflate(R.layout.fragment_listpage, container, false);
     }
 
     @Override
@@ -39,6 +34,7 @@ public class Listpage extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
 
         final View reference = getView();
+
         TextView first = (TextView) reference.findViewById(R.id.first);
         first.setText("Page number : " + count + "\n Open New Page");
         first.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +68,7 @@ public class Listpage extends BaseFragment {
         Bundle bnd = new Bundle();
         bnd.putInt("page", 1 + count);
         listpage.setArguments(bnd);
-        ((BaseControllerFragment) getParentFragment()).replaceFragment(listpage, addToBackStack);
+        getFragmentLoader(getActivity()).loadFragment(listpage, addToBackStack);
     }
 
     public void replaceFragment() {
@@ -80,6 +76,6 @@ public class Listpage extends BaseFragment {
         Bundle bnd = new Bundle();
         bnd.putInt("page", ++count);
         dashboard.setArguments(bnd);
-        ((BaseControllerFragment) getParentFragment()).replaceFragment(dashboard, true);
+        getFragmentLoader(getActivity()).loadFragment(dashboard, true);
     }
 }

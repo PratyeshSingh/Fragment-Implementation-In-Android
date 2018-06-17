@@ -14,18 +14,15 @@ public class Dashboard extends BaseFragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        if (container == null) {
-            return null;
-        }
-        View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        View reference = getView();
+        final View reference = getView();
+
         reference.findViewById(R.id.first).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +37,6 @@ public class Dashboard extends BaseFragment {
         Bundle bnd = new Bundle();
         bnd.putInt("page", 1);
         listpage.setArguments(bnd);
-        ((BaseControllerFragment) getParentFragment()).replaceFragment(listpage, true);
+        getFragmentLoader(getActivity()).loadFragment(listpage, true);
     }
 }

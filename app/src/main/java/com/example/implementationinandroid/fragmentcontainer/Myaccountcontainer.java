@@ -10,9 +10,6 @@ import com.example.implementationinandroid.R;
 import com.example.implementationinandroid.fragment.Dashboard;
 import com.example.implementationinandroid.fragmentbasecontroller.BaseControllerFragment;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class Myaccountcontainer extends BaseControllerFragment {
 
     private boolean mIsViewInited;
@@ -29,11 +26,12 @@ public class Myaccountcontainer extends BaseControllerFragment {
         ((TextView) getView().findViewById(R.id.textView)).setText("Myaccount Container");
         if (!mIsViewInited) {
             mIsViewInited = true;
+            createFragmentLoader(this, R.id.container_framelayout);
             initView();
         }
     }
 
     private void initView() {
-        replaceFragment(new Dashboard(), false);
+        loadFragment(new Dashboard(), false);
     }
 }

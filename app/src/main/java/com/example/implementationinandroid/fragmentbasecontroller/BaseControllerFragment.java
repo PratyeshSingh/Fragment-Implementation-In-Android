@@ -1,70 +1,55 @@
 package com.example.implementationinandroid.fragmentbasecontroller;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
-import com.example.implementationinandroid.R;
 import com.example.implementationinandroid.fragment.BaseFragment;
+import com.example.implementationinandroid.fragment.FragmentLoaderController;
 
 public class BaseControllerFragment extends Fragment {
+    protected FragmentLoaderController mFragmentLoaderController;
 
-
-    public void replaceFragment(BaseFragment fragment, boolean addToBackStack, String ... tagname) {
-
-                FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-                if (addToBackStack) {
-                    if (tagname!=null&& tagname.length>0)
-                        transaction.addToBackStack(tagname[0]);
-                        else
-                    transaction.addToBackStack(null);
-                }
-
-                //transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.replace(R.id.container_framelayout, fragment);
-                transaction.commit();
-                getChildFragmentManager().executePendingTransactions();
+    public void createFragmentLoader(Fragment fragment, int fragmentContainerId) {
+        mFragmentLoaderController = new FragmentLoaderController(fragment, fragmentContainerId);
     }
 
-
-
-    public boolean popFragment() {
-
-        FragmentManager fm = getChildFragmentManager();
-        int backStackEntryCount = fm.getBackStackEntryCount();
-
-        boolean isPop = false;
-        if (backStackEntryCount > 0) {
-            isPop = true;
-            //fm.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            fm.popBackStack();
+    public void loadFragment(BaseFragment fragment, boolean addToBackStack, String fragmentName) {
+        if (mFragmentLoaderController != null) {
+            mFragmentLoaderController.loadFragment(fragment, addToBackStack, fragmentName);
         }
-
-        return isPop;
     }
 
-    private String getLastFragmentTag() {
-
-        String lastFragmentTag = "";
-        FragmentManager fm = getChildFragmentManager();
-        int count = fm.getBackStackEntryCount();
-        if (count > 0) {
-            FragmentManager.BackStackEntry entry = fm.getBackStackEntryAt(count - 1);
-            lastFragmentTag = entry.getName();
+    public void loadFragment(BaseFragment fragment, boolean addToBackStack) {
+        if (mFragmentLoaderController != null) {
+            mFragmentLoaderController.loadFragment(fragment, addToBackStack, fragment.getClass().getSimpleName());
         }
-        return lastFragmentTag;
     }
 
-    public void clearFragmentStack() {
-        FragmentManager fm = getChildFragmentManager();
-        int backStackEntryCount = fm.getBackStackEntryCount();
-
-        while (backStackEntryCount > 0) {
-
-           fm.popBackStack();
-            backStackEntryCount--;
+    public boolean popLastFragment() {
+        if (mFragmentLoaderController != null) {
+            return mFragmentLoaderController.popFragment();
+        } else {
+            return false;
         }
+    }
 
+    public String getLastFragmentTag() {
+        if (mFragmentLoaderController != null) {
+            return mFragmentLoaderController.getLastFragmentTag();
+        } else {
+            return "";
+        }
+    }
+
+    public void popAllFragmentStack() {
+        if (mFragmentLoaderController != null) {
+            mFragmentLoaderController.popAllFragmentStack();
+        }
+    }
+
+    public void popUpToThisFragmentFromBackStack(String fragmentName) {
+        if (mFragmentLoaderController != null) {
+            mFragmentLoaderController.popUpToThisFragmentFromBackStack(fragmentName);
+        }
     }
 }
 
